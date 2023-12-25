@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Árvore de Natal</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      border: 1px solid #000;
+      background-color: #000;
+      margin: 0 auto;
+    }
+
+    #mensagem {
+      position: fixed;
+      top: 15%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 10px;
+      background-color: rgba(255, 0, 0, 0.8);
+      color: #fff;
+      border: none;
+      display: none;
+      max-width: 150px;
+      text-align: center;
+      border-radius: 50px; /* Ajuste para um formato mais arredondado */
+    }
+
+    #mensagem p {
+      margin: 5px 0; /* Ajuste para separação entre os parágrafos */
+    }
+
+    #coracao {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+    }
+
+    #coracao::before,
+    #coracao::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 10px;
+      height: 16px;
+      background-color: #fff;
+      border-radius: 10px 10px 0 0;
+    }
+
+    #coracao::before {
+      left: 10px;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+
+    #coracao::after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+  </style>
+  <script>
+    function drawChristmasTree() {
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+
+      const treeWidth = 50;
+      const treeHeight = 100;
+      const trunkWidth = 10;
+      const trunkHeight = 20;
+      const rotationSpeedTree = 0.005;
+      let treeAngle = 0;
+
+      const moonRadius = 40; // Aumentei o raio da lua
+
+      const twinkleCount = 50;
+      const twinkleSize = 3;
+      const twinkleColor = '#FFF';
+      const twinkles = [];
+
+      for (let i = 0; i < twinkleCount; i++) {
+        twinkles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          blink: Math.random() > 0.7,
+        });
+      }
+
+      function drawStars() {
+        ctx.fillStyle = '#FFF';
+        for (let i = 0; i < 100; i++) {
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+
+      function drawMoon() {
+        ctx.beginPath();
+        ctx.arc(moonRadius + 10, moonRadius + 10, moonRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#FFF';
+        ctx.fill();
+      }
+
+      function drawTwinkles() {
+        ctx.fillStyle = twinkleColor;
+        for (const twinkle of twinkles) {
+          if (twinkle.blink && Math.random() > 0.8) {
+            ctx.fillRect(twinkle.x, twinkle.y, twinkleSize, twinkleSize);
+          }
+        }
+      }
+
+      function showMessage() {
+        const mensagem = document.getElementById('mensagem');
+        mensagem.style.display = 'block';
+
+        // Esconde a mensagem após 5 segundos
+        setTimeout(function () {
+          mensagem.style.display = 'none';
+        }, 6000);
+      }
+
+      function drawTree() {
+        // Desenha a árvore com o tronco
+        ctx.fillStyle = 'brown';
+        ctx.fillRect(canvas.width / 2 - trunkWidth / 2, canvas.height - trunkHeight, trunkWidth, trunkHeight);
+
+        ctx.fillStyle = 'green';
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2 - treeWidth / 2, canvas.height - trunkHeight);
+        ctx.lineTo(canvas.width / 2, canvas.height - treeHeight - trunkHeight);
+        ctx.lineTo(canvas.width / 2 + treeWidth / 2, canvas.height - trunkHeight);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function animate() {
+        // Limpa o canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Desenha as estrelas
+        drawStars();
+
+        // Desenha a lua
+        drawMoon();
+
+        // Desenha os pisca-piscas
+        drawTwinkles();
+
+        // Desenha a árvore de Natal
+        drawTree();
+
+        // Atualiza os ângulos para a próxima iteração
+        treeAngle += rotationSpeedTree;
+
+        // Chama a função para mostrar a mensagem quando atinge uma certa condição
+        if (Math.floor(treeAngle) % 360 === 0) {
+          showMessage();
+        }
+
+        // Agendando a próxima animação
+        requestAnimationFrame(animate);
+      }
+
+      // Inicia a animação
+      animate();
+    }
+  </script>
+</head>
+
+<body>
+  <canvas id="myCanvas" width="400" height="400"></canvas>
+
+  <!-- Mensagem de 8 meses de namoro em forma de coração -->
+  <div id="mensagem">
+    <div id="coracao"></div>
+    <p>CARACAS amor, 9 meses já né, e eu te amo cada vez mais!</p>
+    <p>Feliz natal amor!!!</p>
+    <p>EU TE AMO MUITO</p> 
+  </div>
+
+  <script>
+    // Chamando a função principal para desenhar e animar a árvore de Natal
+    drawChristmasTree();
+  </script>
+</body>
+
+</html>
